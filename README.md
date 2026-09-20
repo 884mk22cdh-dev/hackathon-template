@@ -14,7 +14,7 @@ AI-агент, который за 20 секунд готовит план ур�
 
 ## Демо
 
-Живая версия: _ссылка появится после деплоя_
+Живая версия: https://hackathon-template-oscaraltyn.vercel.app
 
 ## Стек
 
@@ -25,7 +25,7 @@ AI-агент, который за 20 секунд готовит план ур�
 ## Запуск локально
 
 ```bash
-git clone <ссылка на репозиторий>
+git clone https://github.com/884mk22cdh-dev/hackathon-template.git
 cd hackathon-template
 npm install
 cp .env.example .env.local
