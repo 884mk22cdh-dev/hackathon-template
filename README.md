@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Помощник учителя
 
-## Getting Started
+AI-агент, который за 20 секунд готовит план урока, проверочные вопросы и домашнее задание по любой теме школьной программы Казахстана.
 
-First, run the development server:
+## Проблема
+
+Учитель в Казахстане тратит на подготовку одного урока 40–60 минут. При нагрузке 20+ уроков в неделю это до 20 часов рутины, которую можно автоматизировать.
+
+## Решение
+
+- Учитель вводит предмет, класс и тему.
+- Агент на базе Claude генерирует цель урока, поминутный план на 45 минут, 5 проверочных вопросов с ответами и домашнее задание.
+- Результат на русском или казахском, копируется одной кнопкой.
+
+## Демо
+
+Живая версия: _ссылка появится после деплоя_
+
+## Стек
+
+- Next.js 16 (App Router), React 19, Tailwind CSS
+- Claude API, модель `claude-opus-5`, официальный SDK `@anthropic-ai/sdk`
+- Деплой: Vercel
+
+## Запуск локально
 
 ```bash
+git clone <ссылка на репозиторий>
+cd hackathon-template
+npm install
+cp .env.example .env.local
+# вписать свой ключ в .env.local: ANTHROPIC_API_KEY=sk-ant-...
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Открыть http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Деплой на Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Зайти на https://vercel.com/new и импортировать этот репозиторий из GitHub.
+2. В разделе Environment Variables добавить `ANTHROPIC_API_KEY` со своим ключом.
+3. Нажать Deploy. Через минуту проект доступен по ссылке вида `https://<имя>.vercel.app`.
 
-## Learn More
+Или через терминал:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm i -g vercel
+vercel login
+vercel env add ANTHROPIC_API_KEY production
+vercel --prod
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Структура проекта
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  page.tsx              экран с формой и результатом
+  api/generate/route.ts серверный вызов Claude API
+lib/
+  prompt.ts             системный промпт агента
+.env.example            список переменных окружения
+```
 
-## Deploy on Vercel
+## Как работает агент
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Пользователь заполняет форму на главной странице.
+2. Браузер отправляет POST-запрос на `/api/generate`.
+3. Серверный роут вызывает Claude с системным промптом из `lib/prompt.ts` и возвращает текст.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ключ API хранится только на сервере и никогда не попадает в браузер.
+
+## Команда
+
+- Оскар Алтынбеков
+
+## Что дальше
+
+- Экспорт в PDF и DOCX.
+- Загрузка учебника, чтобы план опирался на конкретный параграф.
+- Банк готовых уроков с поиском по теме и классу.
